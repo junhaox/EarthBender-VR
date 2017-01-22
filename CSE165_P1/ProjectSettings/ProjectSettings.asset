@@ -4,7 +4,7 @@
 PlayerSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 10
-  productGUID: 0a3891132b26c95499558001f8c6a676
+  productGUID: 62fc0eb26cceeb948bb4e5066010a15c
   AndroidProfiler: 0
   defaultScreenOrientation: 4
   targetDevice: 2
@@ -454,7 +454,7 @@ PlayerSettings:
   vrEditorSettings: {}
   cloudServicesEnabled:
     UNet: 1
-  cloudProjectId: 44388aa3-a200-4241-aafd-02dd6aa0c7e8
-  projectName: CSE165_P1 (3)
+  cloudProjectId: 9cd65a3a-0a9b-47b1-ace8-9b7e3bdddf00
+  projectName: CSE165_P1 (4)
   organizationId: junhaox
   cloudEnabled: 0
