@@ -5,6 +5,8 @@ using UnityEngine;
 public class SpawnBricks : MonoBehaviour {
     [SerializeField] private GameObject prefab;
 
+    private List<GameObject> bricks = new List<GameObject>();
+
 	// Use this for initialization
 	void Start () {
         Debug.Log("Start()");
@@ -16,12 +18,7 @@ public class SpawnBricks : MonoBehaviour {
         {
             Instantiate(prefab, new Vector3(i + 2.0f, 0, 0), Quaternion.Euler(new Vector3(0.0f, 45.0f, 0.0f)));
         }*/
-        int numBricks = 17;
-        for (int i = 0; i < 10; i++)
-        {
-            float offset = i % 2 == 0 ? 0.0f : getRotation(1, numBricks) / 2.0f;
-            spawnBrickLayer(i, numBricks, offset);
-        }
+        spawnBricks();
 
     }
 	
@@ -29,6 +26,16 @@ public class SpawnBricks : MonoBehaviour {
 	void Update () {
         //Debug.Log("Update()");
 	}
+
+    void spawnBricks()
+    {
+        int numBricks = 17;
+        for (int i = 0; i < 10; i++)
+        {
+            float offset = i % 2 == 0 ? 0.0f : getRotation(1, numBricks) / 2.0f;
+            spawnBrickLayer(i, numBricks, offset);
+        }
+    }
 
     void spawnBrickLayer(int layer, int numBricks, float offset)
     {
@@ -43,12 +50,12 @@ public class SpawnBricks : MonoBehaviour {
             float theta = getRotation(i, numBricks) + offset;
             float deg = radToDeg(theta);
             Debug.Log(theta);
-            Instantiate(
+            bricks.Add(Instantiate(
                 prefab,
                 //new Vector3(i + 2.0f, layer * sizeY, 0),
                 new Vector3(r * Mathf.Cos(theta), layer * sizeY, r * Mathf.Sin(theta)),
                 Quaternion.Euler(new Vector3(0.0f, -deg + 90.0f, 0.0f))
-                );
+                ));
         }
     }
 
@@ -60,5 +67,17 @@ public class SpawnBricks : MonoBehaviour {
     float radToDeg(float rad)
     {
         return rad / (Mathf.PI * 2.0f) * 360.0f;
+    }
+
+    public void Reset()
+    {
+        Debug.Log("SpawnBricks Reset()");
+        foreach (GameObject brick in bricks)
+        {
+            Destroy(brick);
+        }
+        bricks.Clear();
+
+        spawnBricks();
     }
 }
