@@ -5,6 +5,9 @@ TagManager:
   serializedVersion: 2
   tags:
   - LaserDestroyable
+  - CannonSwitch
+  - LaserSwitch
+  - OffSwitch
   layers:
   - Default
   - TransparentFX

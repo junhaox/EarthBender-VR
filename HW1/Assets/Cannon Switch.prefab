@@ -24,7 +24,7 @@ GameObject:
   - component: {fileID: 23585459308349292}
   m_Layer: 0
   m_Name: Cannon Switch
-  m_TagString: Untagged
+  m_TagString: CannonSwitch
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

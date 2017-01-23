@@ -65,7 +65,6 @@ public class Gaze : MonoBehaviour {
         Vector3 lookDir = cam.transform.forward;
 
         float theta = Vector3.Angle(lookDir, new Vector3(0.0f, 1.0f, 0.0f));
-        Debug.Log(lookDir);
 
         if (theta <= 35.0f
             && (System.DateTime.Now - lastReset).TotalSeconds >= 2)
