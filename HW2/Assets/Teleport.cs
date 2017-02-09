@@ -7,11 +7,6 @@ public class Teleport : MonoBehaviour {
     [SerializeField]
     private GameObject rightHand;
 
-    [SerializeField]
-    private GameObject cube;
-
-    private bool aPressed = false;
-
 	// Use this for initialization
 	void Start () {
 		
