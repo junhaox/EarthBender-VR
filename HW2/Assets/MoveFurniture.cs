@@ -72,6 +72,12 @@ public class MoveFurniture : MonoBehaviour {
         Transform touchTrans = rightHand.transform;
         //selected.transform.rotation = rightHand.transform.rotation;
         selected.transform.position = touchTrans.position + touchTrans.forward * dist;
+        
+        Vector2 rot = OVRInput.Get(OVRInput.Axis2D.PrimaryThumbstick);
+        selected.transform.Rotate(new Vector3(rot.y, 0.0f, rot.x));
+
+        Vector2 rotDist = OVRInput.Get(OVRInput.Axis2D.SecondaryThumbstick);
+        dist += 0.2f * rotDist.y;
     }
 
     private void moveWhiteboard()
