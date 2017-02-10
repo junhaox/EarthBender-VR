@@ -19,7 +19,13 @@ public class SpawnFurniture : MonoBehaviour {
     [SerializeField]
     private GameObject tv;
 
-    private int type = 0;
+    [SerializeField]
+    private GameObject whiteboard;
+
+    [SerializeField]
+    private GameObject leftHand;
+
+    private int type = 5;
 
     // Use this for initialization
     void Start ()
@@ -35,7 +41,7 @@ public class SpawnFurniture : MonoBehaviour {
         } else if (OVRInput.GetDown(OVRInput.RawButton.Y))
         {
             Debug.Log("Y pressed");
-            type = (type + 1) % 5;
+            type = (type + 1) % 6;
         }
     }
 
@@ -58,13 +64,40 @@ public class SpawnFurniture : MonoBehaviour {
                 break;
             case 4:
             default:
-                furniture = tv;
+                furniture = chair;
                 break;
         }
-        Instantiate(
-                furniture,
-                new Vector3(0.0f, 20.0f, 0.0f),
-                Quaternion.Euler(new Vector3(0.0f, 1.0f, 0.0f))
-                );
+
+        if (type == 5)
+        {
+            spawnWhiteboard();
+        } else
+        {
+            Instantiate(
+                    furniture,
+                    new Vector3(0.0f, 20.0f, 0.0f),
+                    Quaternion.Euler(new Vector3(0.0f, 1.0f, 0.0f))
+                    );
+        }
+    }
+
+    private void spawnWhiteboard()
+    {
+        Ray ray = new Ray(leftHand.transform.position, leftHand.transform.forward);
+        RaycastHit hit;
+
+        if (Physics.Raycast(ray, out hit, Mathf.Infinity) && hit.collider.tag.Equals("Wall"))
+        {
+            Debug.Log("Spawn Whiteboard");
+            Debug.Log(hit.normal);
+            Instantiate(
+                    whiteboard,
+                    hit.point,
+                    Quaternion.LookRotation(whiteboard.transform.forward, -hit.normal)
+                    );
+        } else
+        {
+            Debug.Log("not pointing at wall");
+        }
     }
 }
