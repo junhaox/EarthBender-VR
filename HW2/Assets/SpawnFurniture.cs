@@ -64,7 +64,7 @@ public class SpawnFurniture : MonoBehaviour {
                 break;
             case 4:
             default:
-                furniture = chair;
+                furniture = tv;
                 break;
         }
 
