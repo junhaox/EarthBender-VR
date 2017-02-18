@@ -28,7 +28,7 @@ public class Load : MonoBehaviour {
             string[] coordinates = line.Split(delim);
 
             GameObject point = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-            point.transform.position = new Vector3(float.Parse(coordinates[0]) * 0.0254F, float.Parse(coordinates[1]) * 0.0254F, float.Parse(coordinates[2]) * 0.0254F); + transform.position;
+            point.transform.position = new Vector3(float.Parse(coordinates[0]) * 0.0254F, float.Parse(coordinates[1]) * 0.0254F, float.Parse(coordinates[2]) * 0.0254F) + transform.position;
             point.transform.localScale = new Vector3(9.144F, 9.144F, 9.144F);
             points.Add(point);
 
