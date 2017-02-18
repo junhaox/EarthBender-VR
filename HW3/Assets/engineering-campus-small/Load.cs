@@ -5,17 +5,30 @@ using UnityEngine;
 
 public class Load : MonoBehaviour {
     public GameObject[] points;
-	// Use this for initialization
-	void Start () {
+    public GameObject target;
+    public GameObject pointer;
+    public LineRenderer pointerLine;
+    public GameObject headMount;
+    // Use this for initialization
+    void Start () {
         LoadData();
         DrawData();
-        
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+
+        pointer = new GameObject();
+        pointerLine = pointer.AddComponent<LineRenderer>();
+        pointerLine.material.color = Color.blue;
+
+        headMount = GameObject.Find("LMHeadMountedRig");
+        headMount.transform.position = points[0].transform.position;
+
+        target = points[1];
+    }
+
+    // Update is called once per frame
+    void Update() {
+        pointerLine.SetPosition(0, headMount.transform.position);
+        pointerLine.SetPosition(1, target.transform.position);
+    }
 
     void LoadData()
     {
@@ -32,9 +45,6 @@ public class Load : MonoBehaviour {
             point.transform.localScale = new Vector3(9.144F, 9.144F, 9.144F);
             points[i] = point;
         }
-
-        GameObject camera = GameObject.Find("LMHeadMountedRig");
-        camera.transform.position = points[0].transform.position;
     }
 
     void DrawData()
@@ -45,11 +55,10 @@ public class Load : MonoBehaviour {
 
             if (i != 0)
             {
-                GameObject lineObject = new GameObject();
-                LineRenderer line = lineObject.AddComponent<LineRenderer>();
-
-                line.SetPosition(0, points[i - 1].transform.position);
-                line.SetPosition(1, points[i].transform.position);
+                GameObject path = new GameObject();
+                LineRenderer pathLine = path.AddComponent<LineRenderer>();
+                pathLine.SetPosition(0, points[i - 1].transform.position);
+                pathLine.SetPosition(1, points[i].transform.position);
             }
         }
     }
