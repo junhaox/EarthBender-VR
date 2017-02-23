@@ -9,15 +9,18 @@ public class Motion : MonoBehaviour {
     private bool forward = false;
 
     private Controller controller;
+    private LeapServiceProvider sp;
 
 	// Use this for initialization
 	void Start () {
         controller = new Controller();
+        sp = GameObject.Find("LeapHandController").GetComponent<LeapServiceProvider>();
 	}
 	
 	// Update is called once per frame
 	void Update () {
-        Frame frame = controller.Frame();
+        //Frame frame = controller.Frame();
+        Frame frame = sp.CurrentFrame;
         Hand rightHand = null;
         foreach (Hand hand in frame.Hands)
         {
@@ -33,29 +36,26 @@ public class Motion : MonoBehaviour {
         }
         //Finger index = rightHand.Fingers[1];
 
+        Vector3 dir = (rightHand.PalmPosition.ToVector3() - transform.position).normalized;
+        float angle = Vector3.Angle(dir, transform.forward) / 90;
+        float sharpness = Mathf.Pow((1 + angle), 2.0f);
+        Quaternion rotation = Quaternion.LookRotation(dir);
+        transform.rotation = Quaternion.Slerp(transform.rotation, rotation, 0.02f * sharpness);
 
-
-		if (true)
+        if (forward)
         {
-            float pitch = rightHand.Direction.Pitch;
-            float yaw = rightHand.Direction.Yaw;
-
-            Debug.Log("pitch: " + pitch + " yaw: " + yaw);
-
-            Transform T = this.transform;
-            //T.position = T.position + T.forward * 1.0f;
-            //T.forward = rightHand.Direction.ToVector3();
-            //Debug.Log(rightHand.Direction.ToVector3());
+            Debug.Log(transform.forward);
+            transform.position = transform.position + transform.forward * 0.7f;
         }
 	}
 
-    void Pointing()
+    void Go()
     {
         Debug.Log("pointing");
         forward = true;
     }
 
-    void StopPointing()
+    void Stop()
     {
         Debug.Log("stop");
         forward = false;

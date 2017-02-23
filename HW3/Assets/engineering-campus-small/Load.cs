@@ -26,8 +26,10 @@ public class Load : MonoBehaviour {
 
     // Update is called once per frame
     void Update() {
-        pointerLine.SetPosition(0, headMount.transform.position);
+        pointerLine.SetPosition(0, headMount.transform.position + headMount.transform.forward * 10.0f);
         pointerLine.SetPosition(1, target.transform.position);
+        pointerLine.startWidth = 0.1f;
+        pointerLine.endWidth = 0.1f;
     }
 
     void LoadData()
@@ -59,6 +61,8 @@ public class Load : MonoBehaviour {
                 LineRenderer pathLine = path.AddComponent<LineRenderer>();
                 pathLine.SetPosition(0, points[i - 1].transform.position);
                 pathLine.SetPosition(1, points[i].transform.position);
+                pathLine.startWidth = 0.1f;
+                pathLine.endWidth = 0.1f;
             }
         }
     }
