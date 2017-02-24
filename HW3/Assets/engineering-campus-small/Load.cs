@@ -10,6 +10,8 @@ public class Load : MonoBehaviour {
     public LineRenderer pointerLine;
     public GameObject headMount;
     public GameObject camera;
+
+    private int nextIdx = 1;
     // Use this for initialization
     void Start () {
         LoadData();
@@ -24,11 +26,12 @@ public class Load : MonoBehaviour {
 
         camera = GameObject.Find("CenterEyeAnchor");
 
-        target = points[1];
+        target = points[nextIdx];
     }
 
     // Update is called once per frame
     void Update() {
+        target = points[nextIdx];
         pointerLine.SetPosition(0, camera.transform.position + camera.transform.forward * 10.0f);
         pointerLine.SetPosition(1, target.transform.position);
         pointerLine.startWidth = 0.1f;
@@ -46,8 +49,16 @@ public class Load : MonoBehaviour {
             string[] coordinates = lines[i].Split(delim);
 
             GameObject point = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+            //point.tag = i == 1 ? "Next" : "NotNext";
             point.transform.position = new Vector3(float.Parse(coordinates[0]) * 0.0254F, float.Parse(coordinates[1]) * 0.0254F, float.Parse(coordinates[2]) * 0.0254F) + transform.position;
             point.transform.localScale = new Vector3(9.144F, 9.144F, 9.144F);
+            
+            SphereCollider sc = point.AddComponent<SphereCollider>();
+            sc.radius = 1.0f;
+            point.tag = "CheckPoint";
+            //Rigidbody rb = point.AddComponent<Rigidbody>();
+            //rb.useGravity = false;
+ 
             points[i] = point;
         }
     }
@@ -67,6 +78,19 @@ public class Load : MonoBehaviour {
                 pathLine.startWidth = 0.1f;
                 pathLine.endWidth = 0.1f;
             }
+        }
+    }
+
+    public void HitCheckPoint(int id)
+    {
+        if (id == points[nextIdx].GetInstanceID())
+        {
+            points[nextIdx].GetComponent<Renderer>().material.color = Color.green;
+            nextIdx++;
+        }
+        if (nextIdx >= points.Length)
+        {
+            Debug.Log("FINISHED");
         }
     }
 }

@@ -31,7 +31,7 @@ public class Motion : MonoBehaviour {
         }
         if (rightHand == null)
         {
-            Debug.LogError("NO HAND FOUND");
+            //Debug.LogError("NO HAND FOUND");
             return;
         }
         //Finger index = rightHand.Fingers[1];
@@ -44,20 +44,20 @@ public class Motion : MonoBehaviour {
 
         if (forward)
         {
-            Debug.Log(transform.forward);
+            //Debug.Log(transform.forward);
             transform.position = transform.position + transform.forward * 0.7f;
         }
 	}
 
     void Go()
     {
-        Debug.Log("pointing");
+        //Debug.Log("pointing");
         forward = true;
     }
 
     void Stop()
     {
-        Debug.Log("stop");
+        //Debug.Log("stop");
         forward = false;
     }
 }
