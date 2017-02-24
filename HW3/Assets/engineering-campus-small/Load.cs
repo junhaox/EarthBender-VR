@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Load : MonoBehaviour {
     public GameObject[] points;
@@ -11,11 +12,19 @@ public class Load : MonoBehaviour {
     public GameObject headMount;
     public GameObject camera;
 
+    public Text text;
+    public Text timeText;
+
+    float start = 0;
+    float countdown = 1.0f;
+
     private int nextIdx = 1;
     // Use this for initialization
     void Start () {
         LoadData();
         DrawData();
+
+        start = Time.time;
 
         pointer = new GameObject();
         pointerLine = pointer.AddComponent<LineRenderer>();
@@ -23,6 +32,7 @@ public class Load : MonoBehaviour {
 
         headMount = GameObject.Find("LMHeadMountedRig");
         headMount.transform.position = points[0].transform.position;
+        headMount.transform.LookAt(points[1].transform);
 
         camera = GameObject.Find("CenterEyeAnchor");
 
@@ -36,6 +46,23 @@ public class Load : MonoBehaviour {
         pointerLine.SetPosition(1, target.transform.position);
         pointerLine.startWidth = 0.1f;
         pointerLine.endWidth = 0.1f;
+
+        float time = Time.time - start;
+        if (time < countdown)
+        {
+            text.text = (countdown - time).ToString("0");
+            timeText.text = "";
+        } else
+        {
+            float dist = Vector3.Distance(target.transform.position, headMount.transform.position);
+            text.text = dist.ToString("0") + "m";
+
+            float timer = Time.time - start - countdown;
+            int minutes = Mathf.FloorToInt(timer / 60F);
+            int seconds = Mathf.FloorToInt(timer - minutes * 60);
+            int ms = Mathf.FloorToInt((timer - (float)(int)timer) * 100);
+            timeText.text = string.Format("{0:0}:{1:00}:{2:00}", minutes, seconds, ms);
+        }
     }
 
     void LoadData()
@@ -67,7 +94,7 @@ public class Load : MonoBehaviour {
     {
         for (int i = 0; i < points.Length; i++)
         {
-            points[i].GetComponent<Renderer>().material.color = Color.red;
+            points[i].GetComponent<Renderer>().material.color = i == 0 ? Color.green : Color.red;
 
             if (i != 0)
             {
@@ -90,7 +117,13 @@ public class Load : MonoBehaviour {
         }
         if (nextIdx >= points.Length)
         {
+            nextIdx = 0;
             Debug.Log("FINISHED");
         }
+    }
+
+    public bool Playing()
+    {
+        return Time.time - start >= countdown;
     }
 }

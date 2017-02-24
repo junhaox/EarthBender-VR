@@ -11,6 +11,8 @@ public class Motion : MonoBehaviour {
     private Controller controller;
     private LeapServiceProvider sp;
 
+    public Load load;
+
 	// Use this for initialization
 	void Start () {
         controller = new Controller();
@@ -42,7 +44,7 @@ public class Motion : MonoBehaviour {
         Quaternion rotation = Quaternion.LookRotation(dir);
         transform.rotation = Quaternion.Slerp(transform.rotation, rotation, 0.02f * sharpness);
 
-        if (forward)
+        if (forward && load.Playing())
         {
             //Debug.Log(transform.forward);
             transform.position = transform.position + transform.forward * 0.7f;
