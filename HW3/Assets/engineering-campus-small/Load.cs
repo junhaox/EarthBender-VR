@@ -16,7 +16,8 @@ public class Load : MonoBehaviour {
     public Text timeText;
 
     float start = 0;
-    float countdown = 1.0f;
+    float countdown = 4.0f;
+    float pause = 0;
 
     bool finished = false;
 
@@ -56,8 +57,15 @@ public class Load : MonoBehaviour {
             timeText.text = "";
         } else if (!finished)
         {
-            float dist = Vector3.Distance(target.transform.position, headMount.transform.position);
-            text.text = dist.ToString("0") + "m";
+            if (pause > 0)
+            {
+                text.text = pause.ToString("0");
+                pause = pause - Time.deltaTime;
+            } else
+            {
+                float dist = Vector3.Distance(target.transform.position, headMount.transform.position);
+                text.text = dist.ToString("0") + "m";
+            }
 
             float timer = Time.time - start - countdown;
             int minutes = Mathf.FloorToInt(timer / 60F);
@@ -123,13 +131,21 @@ public class Load : MonoBehaviour {
         if (nextIdx >= points.Length)
         {
             finished = true;
-            nextIdx = 0;
+            nextIdx = 1;
             Debug.Log("FINISHED");
         }
     }
 
+    public void HitCampus()
+    {
+        headMount.transform.position = points[nextIdx - 1].transform.position;
+        headMount.transform.LookAt(points[nextIdx].transform);
+        pause = 3.0f;
+    }
+
     public bool Playing()
     {
-        return Time.time - start >= countdown;
+        return (Time.time - start >= countdown) &&
+               (pause <= 0);
     }
 }

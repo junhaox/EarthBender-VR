@@ -18,11 +18,14 @@ public class CheckPointCollision : MonoBehaviour {
 
     void OnTriggerEnter(Collider collision)
     {
-        Debug.Log(collision.gameObject.tag);
         if (collision.gameObject.tag.Equals("CheckPoint"))
         {
-            Debug.Log("checkpoint collision");
+            //Debug.Log("checkpoint collision");
             load.HitCheckPoint(collision.gameObject.GetInstanceID());
+        } else if (collision.gameObject.tag.Equals("Campus"))
+        {
+            Debug.Log("campus collision");
+            load.HitCampus();
         }
     }
 }

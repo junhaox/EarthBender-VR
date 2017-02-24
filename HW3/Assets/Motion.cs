@@ -6,7 +6,7 @@ using Leap.Unity;
 
 public class Motion : MonoBehaviour {
 
-    private bool forward = false;
+    private bool forward = true;
 
     private Controller controller;
     private LeapServiceProvider sp;
