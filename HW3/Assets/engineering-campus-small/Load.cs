@@ -18,6 +18,8 @@ public class Load : MonoBehaviour {
     float start = 0;
     float countdown = 1.0f;
 
+    bool finished = false;
+
     private int nextIdx = 1;
     // Use this for initialization
     void Start () {
@@ -52,7 +54,7 @@ public class Load : MonoBehaviour {
         {
             text.text = (countdown - time).ToString("0");
             timeText.text = "";
-        } else
+        } else if (!finished)
         {
             float dist = Vector3.Distance(target.transform.position, headMount.transform.position);
             text.text = dist.ToString("0") + "m";
@@ -62,6 +64,9 @@ public class Load : MonoBehaviour {
             int seconds = Mathf.FloorToInt(timer - minutes * 60);
             int ms = Mathf.FloorToInt((timer - (float)(int)timer) * 100);
             timeText.text = string.Format("{0:0}:{1:00}:{2:00}", minutes, seconds, ms);
+        } else
+        {
+            text.text = "FINISH";
         }
     }
 
@@ -117,6 +122,7 @@ public class Load : MonoBehaviour {
         }
         if (nextIdx >= points.Length)
         {
+            finished = true;
             nextIdx = 0;
             Debug.Log("FINISHED");
         }
