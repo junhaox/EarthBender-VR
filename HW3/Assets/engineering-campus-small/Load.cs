@@ -9,6 +9,7 @@ public class Load : MonoBehaviour {
     public GameObject pointer;
     public LineRenderer pointerLine;
     public GameObject headMount;
+    public GameObject camera;
     // Use this for initialization
     void Start () {
         LoadData();
@@ -21,12 +22,14 @@ public class Load : MonoBehaviour {
         headMount = GameObject.Find("LMHeadMountedRig");
         headMount.transform.position = points[0].transform.position;
 
+        camera = GameObject.Find("CenterEyeAnchor");
+
         target = points[1];
     }
 
     // Update is called once per frame
     void Update() {
-        pointerLine.SetPosition(0, headMount.transform.position + headMount.transform.forward * 10.0f);
+        pointerLine.SetPosition(0, camera.transform.position + camera.transform.forward * 10.0f);
         pointerLine.SetPosition(1, target.transform.position);
         pointerLine.startWidth = 0.1f;
         pointerLine.endWidth = 0.1f;
