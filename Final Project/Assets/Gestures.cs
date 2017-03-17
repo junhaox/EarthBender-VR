@@ -35,6 +35,12 @@ public class Gestures : MonoBehaviour {
     private GameObject gazedRock;
     private GameObject grabbedRock;
 
+    private Vector3 grabStartPos;
+    private Vector3 grabStartHandPos;
+    private Vector3 prevGrabbedRockPos;
+    private Vector3 grabbedRockDir;
+    private Vector3 grabbedRockVel;
+
 	// Use this for initialization
 	void Start () {
         camera = Camera.main;
@@ -42,28 +48,36 @@ public class Gestures : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        GameObject gazedObj = GetComponent<Gaze>().GetGazedObject();
-        if (gazedObj != null && gazedObj.GetInstanceID().Equals("Rock"))
-        {
-            gazedRock = gazedObj;
-        }
-        bool grabbingRock = ManageGrabbedRock();
-        
         rightHandPos = rightPalm.transform.position;
-        int jab = DetectJab();
-        if (jab == POUND)
+
+        if (spawningRock == null)
         {
-            SpawnRock();
+            GameObject gazedObj = GetComponent<Gaze>().GetGazedObject();
+            if (gazedObj != null && gazedObj.tag.Equals("Rock"))
+            {
+                Debug.Log("Setting gazedObj");
+                gazedRock = gazedObj;
+            }
+            bool grabbingRock = ManageGrabbedRock();
         }
-
-        if (jab == PUNCH)
+        
+        if (grabbedRock == null)
         {
-            Debug.Log("PUNCH");
-            LaunchRock();
+            int jab = DetectJab();
+            if (jab == POUND)
+            {
+                SpawnRock();
+            }
+
+            if (jab == PUNCH)
+            {
+                Debug.Log("PUNCH");
+                LaunchRock();
+            }
+
+            ManageSpawningRock();
         }
-
-        ManageSpawningRock();
-
+        
         //Debug.Log("AAA " + (rightHandPos - prevRightHandPos).magnitude);
         prevRightHandPos = rightHandPos;
 	}
@@ -139,13 +153,33 @@ public class Gestures : MonoBehaviour {
     // returns true if a rock is currently grabbed
     bool ManageGrabbedRock()
     {
-        if (grabbedRock != null)
+        if (grabbedRock == null)
         {
-            grabbedRock.transform.position = rightHandPos + new Vector3(0.0f, 0.0f, 2.0f);
-            return true;
+            return false;
         }
 
-        return false;
+        //grabbedRock.transform.position = rightHandPos + new Vector3(0.0f, 0.0f, 2.0f);
+        Vector3 newPos = grabStartPos + (rightHandPos - grabStartHandPos) * 60.0f;
+        Vector3 offset = Vector3.zero;
+        if (newPos.y < 1.0f)
+        {
+            newPos.y = 1.0f;
+        }
+        if (prevGrabbedRockPos.y > 1.0f)
+        {
+            offset = Vector3.up * Mathf.Sin(Time.time * 2.5f) * 0.3f;
+        }
+        Debug.Log(offset);
+        //Vector3 newPos = grabbedRock.transform.position + (rightHandPos - prevRightHandPos) * 100.0f;
+
+        Vector3 diff = newPos - prevGrabbedRockPos;
+
+        prevGrabbedRockPos = prevGrabbedRockPos + diff.normalized * (diff.magnitude / 30.0f);
+        grabbedRock.transform.position = prevGrabbedRockPos + offset;
+
+        grabbedRockDir = diff;
+
+        return true;
     }
 
     void ManageSpawningRock()
@@ -194,7 +228,16 @@ public class Gestures : MonoBehaviour {
 
         if (gazedRock != null && gazedRock.tag.Equals("Rock"))
         {
+            Debug.Log("Grabbing rock " + gazedRock.GetInstanceID());
+            grabStartHandPos = rightHandPos;
+            grabStartPos = gazedRock.transform.position;
             grabbedRock = gazedRock;
+            gazedRock = null;
+
+            prevGrabbedRockPos = grabbedRock.transform.position;
+
+            Rigidbody rockRigidbody = grabbedRock.GetComponent<Rigidbody>();
+            rockRigidbody.useGravity = false;
         }
     }
 
@@ -203,6 +246,14 @@ public class Gestures : MonoBehaviour {
         Debug.Log("no fist");
         rightFist = false;
 
+        if (grabbedRock != null)
+        {
+            Rigidbody rockRigidbody = grabbedRock.GetComponent<Rigidbody>();
+            rockRigidbody.useGravity = true;
+            rockRigidbody.velocity = grabbedRockDir * 2.5f;
+            //rockRigidbody.AddForce(grabbedRockDir * 80.0f);
+            GetComponent<Gaze>().Drop();
+        }
         grabbedRock = null;
     }
 

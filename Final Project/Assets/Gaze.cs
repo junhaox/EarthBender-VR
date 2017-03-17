@@ -18,7 +18,7 @@ public class Gaze : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
         Ray ray = new Ray(camera.transform.position, camera.transform.forward);
-        transform.position = camera.transform.position + camera.transform.forward * 3.0f;
+        //transform.position = camera.transform.position + camera.transform.forward * 3.0f;
         RaycastHit hit;
 
         if (Physics.Raycast(ray, out hit, Mathf.Infinity))
@@ -30,10 +30,6 @@ public class Gaze : MonoBehaviour {
                 prevObjId = obj.GetInstanceID();
                 prevObjTime = Time.time;
             }
-            if (Time.time - prevObjTime >= 2.0f)
-            {
-                Debug.Log("Looking at object " + prevObjId);
-            }
         } else
         {
             prevObj = null;
@@ -42,10 +38,16 @@ public class Gaze : MonoBehaviour {
 
     public GameObject GetGazedObject()
     {
-        if (prevObj != null && Time.time - prevObjTime >= 2.0f)
+        if (prevObj != null && Time.time - prevObjTime >= 0.6f)
         {
             return prevObj;
         }
         return null;
+    }
+
+    public void Drop()
+    {
+        prevObj = null;
+        prevObjId = 0;
     }
 }

@@ -24,7 +24,14 @@ public class Reticle : MonoBehaviour {
             //Debug.Log("HIT " + hit.point);
             Vector3 hitPos = hit.point;
             //hitPos.y = 2.0f;
-            transform.position = hitPos - camera.transform.forward.normalized * 1.0f;
+            float offset = (hitPos - transform.position).magnitude / 30.0f;
+            if ((hitPos - transform.position).magnitude < 0.2f)
+            {
+                transform.position = camera.transform.position + camera.transform.forward * 50.0f;
+            } else
+            {
+                transform.position = hitPos - (camera.transform.forward.normalized * offset);
+            }
             transform.forward = camera.transform.forward;
             float dist = (transform.position - camera.transform.position).magnitude;
             float scale = dist / RETICLE_SCALE;
