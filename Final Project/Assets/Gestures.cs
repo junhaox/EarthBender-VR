@@ -32,6 +32,8 @@ public class Gestures : MonoBehaviour {
     private Vector3 jabDiff;
     
     private GameObject spawningRock;
+    private GameObject gazedRock;
+    private GameObject grabbedRock;
 
 	// Use this for initialization
 	void Start () {
@@ -40,6 +42,13 @@ public class Gestures : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+        GameObject gazedObj = GetComponent<Gaze>().GetGazedObject();
+        if (gazedObj != null && gazedObj.GetInstanceID().Equals("Rock"))
+        {
+            gazedRock = gazedObj;
+        }
+        bool grabbingRock = ManageGrabbedRock();
+        
         rightHandPos = rightPalm.transform.position;
         int jab = DetectJab();
         if (jab == POUND)
@@ -127,6 +136,18 @@ public class Gestures : MonoBehaviour {
         spawningRock = rock;
     }
 
+    // returns true if a rock is currently grabbed
+    bool ManageGrabbedRock()
+    {
+        if (grabbedRock != null)
+        {
+            grabbedRock.transform.position = rightHandPos + new Vector3(0.0f, 0.0f, 2.0f);
+            return true;
+        }
+
+        return false;
+    }
+
     void ManageSpawningRock()
     {
         if (spawningRock == null)
@@ -170,12 +191,19 @@ public class Gestures : MonoBehaviour {
     {
         Debug.Log("fist");
         rightFist = true;
+
+        if (gazedRock != null && gazedRock.tag.Equals("Rock"))
+        {
+            grabbedRock = gazedRock;
+        }
     }
 
     void NoFist()
     {
         Debug.Log("no fist");
         rightFist = false;
+
+        grabbedRock = null;
     }
 
     void Test()

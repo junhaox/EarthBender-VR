@@ -21,7 +21,7 @@ public class Reticle : MonoBehaviour {
 
         if (Physics.Raycast(ray, out hit, Mathf.Infinity))
         {
-            Debug.Log("HIT " + hit.point);
+            //Debug.Log("HIT " + hit.point);
             Vector3 hitPos = hit.point;
             //hitPos.y = 2.0f;
             transform.position = hitPos - camera.transform.forward.normalized * 1.0f;
