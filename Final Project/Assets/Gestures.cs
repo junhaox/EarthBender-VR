@@ -41,6 +41,8 @@ public class Gestures : MonoBehaviour {
     private Vector3 grabbedRockDir;
     private Vector3 grabbedRockVel;
 
+    //private bool leftOpen = false;
+
 	// Use this for initialization
 	void Start () {
         camera = Camera.main;
@@ -238,6 +240,7 @@ public class Gestures : MonoBehaviour {
 
             Rigidbody rockRigidbody = grabbedRock.GetComponent<Rigidbody>();
             rockRigidbody.useGravity = false;
+            rockRigidbody.velocity = Vector3.zero;
         }
     }
 
@@ -250,11 +253,24 @@ public class Gestures : MonoBehaviour {
         {
             Rigidbody rockRigidbody = grabbedRock.GetComponent<Rigidbody>();
             rockRigidbody.useGravity = true;
-            rockRigidbody.velocity = grabbedRockDir * 2.5f;
+            rockRigidbody.velocity = grabbedRockDir * 1.8f;
             //rockRigidbody.AddForce(grabbedRockDir * 80.0f);
             GetComponent<Gaze>().Drop();
         }
         grabbedRock = null;
+    }
+
+    void LeftHandOpen()
+    {
+        Debug.Log("Left hand open");
+        player.GetComponent<Teleport>().Tele();
+        //leftOpen = true;
+    }
+
+    void LeftHandClose()
+    {
+        Debug.Log("Left hand close");
+        //leftOpen = false;
     }
 
     void Test()
