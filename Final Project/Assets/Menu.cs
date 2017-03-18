@@ -17,7 +17,11 @@ public class Menu : MonoBehaviour {
 	void Update () {
         //Debug.Log(transform.position);
         transform.position = leftHand.transform.position;
-	}
+        Vector3 fwd = Camera.main.transform.forward;
+        fwd.y = 0;
+        transform.forward = fwd;
+
+    }
 
     public void ShowMenu()
     {
