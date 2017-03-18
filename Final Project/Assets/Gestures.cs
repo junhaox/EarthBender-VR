@@ -17,6 +17,7 @@ public class Gestures : MonoBehaviour {
     public GameObject player;
     //public GameObject cube;
     public GameObject sphere;
+    public GameObject menu;
 
     private Camera camera;
 
@@ -171,7 +172,6 @@ public class Gestures : MonoBehaviour {
         {
             offset = Vector3.up * Mathf.Sin(Time.time * 2.5f) * 0.3f;
         }
-        Debug.Log(offset);
         //Vector3 newPos = grabbedRock.transform.position + (rightHandPos - prevRightHandPos) * 100.0f;
 
         Vector3 diff = newPos - prevGrabbedRockPos;
@@ -276,5 +276,15 @@ public class Gestures : MonoBehaviour {
     void Test()
     {
         Debug.Log("palm up");
+    }
+
+    void LShow()
+    {
+        menu.GetComponent<Menu>().ShowMenu();
+    }
+
+    void LHide()
+    {
+        menu.GetComponent<Menu>().HideMenu();
     }
 }
