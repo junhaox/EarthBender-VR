@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Gaze : MonoBehaviour {
+public class Gaze : MonoBehaviour
+{
 
     private Camera camera;
 
@@ -11,12 +12,14 @@ public class Gaze : MonoBehaviour {
     private float prevObjTime;
 
     // Use this for initialization
-    void Start () {
+    void Start()
+    {
         camera = Camera.main;
     }
-	
-	// Update is called once per frame
-	void Update () {
+
+    // Update is called once per frame
+    void Update()
+    {
         Ray ray = new Ray(camera.transform.position, camera.transform.forward);
         //transform.position = camera.transform.position + camera.transform.forward * 3.0f;
         RaycastHit hit;
@@ -30,7 +33,8 @@ public class Gaze : MonoBehaviour {
                 prevObjId = obj.GetInstanceID();
                 prevObjTime = Time.time;
             }
-        } else
+        }
+        else
         {
             prevObj = null;
         }

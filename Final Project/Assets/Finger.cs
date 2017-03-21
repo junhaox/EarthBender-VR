@@ -6,7 +6,7 @@ public class Finger : MonoBehaviour {
 
     public UnityEngine.UI.Button startButton;
     public UnityEngine.UI.Text startButtonText;
-
+    public GameObject mon;
 	// Use this for initialization
 	void Start () {
 		
@@ -19,18 +19,19 @@ public class Finger : MonoBehaviour {
 
     void OnTriggerEnter(Collider other)
     {
-        //Debug.Log(other.gameObject.name);
+        Debug.Log(other.gameObject.name);
         if (other.gameObject.tag.Equals("StartButton"))
         {
             Debug.Log("Start Enter");
             //startButton.Select();
             startButtonText.text = "- Start -";
+            mon.GetComponent<Spawn>().Reset();
         }
     }
 
     void OnTriggerExit(Collider other)
     {
-        //Debug.Log(other.gameObject.name);
+        Debug.Log(other.gameObject.name);
         if (other.gameObject.tag.Equals("StartButton"))
         {
             Debug.Log("Start Exit");

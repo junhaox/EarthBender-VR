@@ -2,19 +2,22 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Reticle : MonoBehaviour {
+public class Reticle : MonoBehaviour
+{
 
     private static float RETICLE_SCALE = 40.0f;
 
     private Camera camera;
 
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    void Start()
+    {
         camera = Camera.main;
-	}
-	
-	// Update is called once per frame
-	void Update () {
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
         Ray ray = new Ray(camera.transform.position, camera.transform.forward);
         transform.position = camera.transform.position + camera.transform.forward * 3.0f;
         RaycastHit hit;
@@ -28,7 +31,8 @@ public class Reticle : MonoBehaviour {
             if ((hitPos - transform.position).magnitude < 0.2f)
             {
                 transform.position = camera.transform.position + camera.transform.forward * 50.0f;
-            } else
+            }
+            else
             {
                 transform.position = hitPos - (camera.transform.forward.normalized * offset);
             }
@@ -36,7 +40,8 @@ public class Reticle : MonoBehaviour {
             float dist = (transform.position - camera.transform.position).magnitude;
             float scale = dist / RETICLE_SCALE;
             transform.localScale = new Vector3(scale, scale);
-        } else
+        }
+        else
         {
             float dist = 50.0f;
             transform.position = camera.transform.position + camera.transform.forward * dist;

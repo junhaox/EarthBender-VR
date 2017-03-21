@@ -1,8 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
-public class Gestures : MonoBehaviour {
+public class Gestures : MonoBehaviour
+{
+    public Image image;
 
     //private static float MAX_Y_ACCEL = 0.0015f;
     private static float R_ACCEL = 0.0017f;
@@ -31,7 +34,7 @@ public class Gestures : MonoBehaviour {
     private Vector3 jabStartPos;
     private float maxRVel = R_ACCEL;
     private Vector3 jabDiff;
-    
+
     private GameObject spawningRock;
     private GameObject gazedRock;
     private GameObject grabbedRock;
@@ -44,13 +47,15 @@ public class Gestures : MonoBehaviour {
 
     //private bool leftOpen = false;
 
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    void Start()
+    {
         camera = Camera.main;
-	}
-	
-	// Update is called once per frame
-	void Update () {
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
         rightHandPos = rightPalm.transform.position;
 
         if (spawningRock == null)
@@ -63,7 +68,7 @@ public class Gestures : MonoBehaviour {
             }
             bool grabbingRock = ManageGrabbedRock();
         }
-        
+
         if (grabbedRock == null)
         {
             int jab = DetectJab();
@@ -80,10 +85,10 @@ public class Gestures : MonoBehaviour {
 
             ManageSpawningRock();
         }
-        
+
         //Debug.Log("AAA " + (rightHandPos - prevRightHandPos).magnitude);
         prevRightHandPos = rightHandPos;
-	}
+    }
 
     int DetectJab()
     {
@@ -151,6 +156,7 @@ public class Gestures : MonoBehaviour {
         rockRigidbody.AddForce(Vector3.up * 360.0f);
 
         spawningRock = rock;
+        Radar.AddRadarObject(spawningRock, image);
     }
 
     // returns true if a rock is currently grabbed
@@ -172,6 +178,7 @@ public class Gestures : MonoBehaviour {
         {
             offset = Vector3.up * Mathf.Sin(Time.time * 2.5f) * 0.3f;
         }
+        Debug.Log(offset);
         //Vector3 newPos = grabbedRock.transform.position + (rightHandPos - prevRightHandPos) * 100.0f;
 
         Vector3 diff = newPos - prevGrabbedRockPos;
@@ -199,6 +206,7 @@ public class Gestures : MonoBehaviour {
             rockRigidbody.velocity.y < 0)
         {
             Destroy(spawningRock);
+            Radar.RemoveRadarObject(spawningRock);
             spawningRock = null;
             Debug.Log("spawning rock destroyed");
         }
@@ -215,13 +223,14 @@ public class Gestures : MonoBehaviour {
         }
     }
 
-
     void OpenPalmUp()
     {
         //Debug.Log("OpenPalmUp");
         Vector3 position = new Vector3(25.0f, 4.0f, 25.0f);
-        Instantiate(rockPrefab, position, Quaternion.identity);
+        GameObject obj = Instantiate(rockPrefab, position, Quaternion.identity);
+        Radar.AddRadarObject(obj, image);
     }
+
 
     void Fist()
     {
